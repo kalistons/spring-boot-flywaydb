@@ -1,62 +1,117 @@
-<div id="top"></div>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
+<div id="top" align="center">
+  <h1> Demo Spring Boot with Flyway and H2 </h1>
+</div>
 
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-
-[![MIT License][instagram-shield]][instagram-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="img/logo.png" alt="Logo" width="500" height="240">
+  <a>
+    <img src="img/logo.png" alt="Logo" width="220" height="120">
   </a>
+  <div align="start">
+    In this repository I am sharing some of what I have been learning about Spring Boot with Flyway. By following the instructions and reading the code I hope I can contribute to your development. Enjoy your studies. :coffee: 
+  </div>
+  <h3 align="start">
+    Go to <a href="https://start.spring.io/">Spring Initializr</a>, configure and add the dependencies.
+  </h3>
+  <div align="start">
+    1. Spring Web </br>
+    2. Spring Data JPA </br>
+    3. H2 Database </br>
+  </div>
+ 
+  <h3 align="start">Community Plugins and Integrations:</h3>
 
-  <h3 align="center">Best-README-Template</h3>
-
-  <p align="center">
-    An awesome README template to jumpstart your projects!
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
+  <p align="start">
+    Spring Boot comes with out-of-the-box integration <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto.data-initialization.migration-tool.flyway">for Flyway. </a>
+    </br>
   </p>
 </div>
 
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
+```
+<dependency>
+    <groupId>org.flywaydb</groupId>
+    <artifactId>flyway-core</artifactId>
+    <version>8.5.13</version>
+</dependency>
+```
+Or build.gradle:
 
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
+```
+compile "org.flywaydb:flyway-core:8.5.13"
+```
+### Sample configuration 
 
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
+```
+spring:
+  flyway:
+    url: jdbc:h2:mem:hbasedb
+    user: user
+    password: zxcvbYe
+    schemas:
+      - flywayschema
+    locations:
+      - classpath:db/migration
+```
+##### or
+```
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+<properties>
+  ...
+  <flyway.user>user</flyway.user>
+  <flyway.password>zxcvbYe</flyway.password>
+  <flyway.url>jdbc:h2:mem:hbasedb</flyway.url>
+  ...
+</properties>
+  ...
+<build>
+  <plugins>
+        <plugin>
+          <groupId>org.flywaydb</groupId>
+          <artifactId>flyway-maven-plugin</artifactId>
+          <version>8.0.0</version>
+          <configuration>
+            <user>${flyway.user}</user>
+            <password>${flyway.password}</password>
+            <url>${flyway.url}</url>
+          </configuration>
+        </plugin>
+        ...
+   </plugins>
+<build>      
+          
+```
+
+### Flyway Naming Patterns
+
+The default naming patterns within Flyway are documented clearly. You have a prefix that determines the type of file, whether a versioned migration (V), an undo migration (U), or a repeatable migration (R). </br>
+
+![flyway_naming](https://user-images.githubusercontent.com/23198970/178641555-1b2ddee7-9507-4d24-bcab-c96b23777ee7.png)
+
+Example of used files</br>
+
+![Sem título](https://user-images.githubusercontent.com/23198970/178642223-8d54ce0f-a9fc-416c-b509-f3992a042d23.png)
+
+```sql
+-- V1_0__create_tables.sql
+CREATE TABLE IF NOT EXISTS tb_user (
+    id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name varchar(40),
+    email varchar(50)
+);
+CREATE TABLE IF NOT EXISTS tb_login (
+    id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    login varchar(40),
+    pass varchar(50),
+    id_user int NOT NULL
+);
+ALTER TABLE tb_login
+ADD CONSTRAINT user_id_fk
+FOREIGN KEY (id_user) REFERENCES tb_user;
+```
+##### Thanks :call_me_hand:
+ [![LinkedIn][linkedin-shield]][linkedin-url]
+
+
 
 
 
@@ -66,20 +121,4 @@ Use this space to list resources you find helpful and would like to give credit 
 [instagram-url]: https://www.instagram.com/kaliston_s/
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/kalistonss/
-[product-screenshot]: images/screenshot.png
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[React-url]: https://reactjs.org/
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/
-[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
-[Angular-url]: https://angular.io/
-[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-[Svelte-url]: https://svelte.dev/
-[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
-[Laravel-url]: https://laravel.com
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[Bootstrap-url]: https://getbootstrap.com
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
+
